@@ -304,7 +304,7 @@
         if (pos > Math.floor(bubbleCount/2)) pos -= bubbleCount;
         const spacing = 380; // espace horizontal entre bulles
         const x = pos * spacing;
-        bubbleDivs[i].style.transform = `translate(-50%, -50%) translateX(${x}px)`;
+        bubbleDivs[i].style.transform = `translateX(${x}px) translateY(-50%)`;
         // Focus central
         if (pos === 0) {
           bubbleDivs[i].classList.add('active');
