@@ -75,9 +75,8 @@
       justify-content: center;
       align-items: center;
     }
-
     .carousel-viewport {
-      width: 800px;
+      width: 900px;
       max-width: 95vw;
       overflow: hidden;
       position: relative;
@@ -85,19 +84,15 @@
       justify-content: center;
       align-items: center;
     }
-
     .carousel {
       display: flex;
       gap: 32px;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: center;
       position: relative;
       height: 400px;
-      transition: transform 0.5s cubic-bezier(.77,0,.18,1);
-    }
-
-    .carousel.shifted {
-      transform: translateX(var(--shift));
+      perspective: none;
+      transition: transform 0.6s cubic-bezier(.77,0,.18,1);
     }
 
     .bubble {
@@ -134,7 +129,6 @@
       pointer-events: none;
       transition: background 0.3s;
     }
-
     .bubble.inactive {
       transform: scale(0.8);
       opacity: 0.3 !important;
@@ -142,7 +136,6 @@
       z-index: 0;
       pointer-events: none;
     }
-
     .bubble.active {
       opacity: 1;
       filter: none;
@@ -153,14 +146,12 @@
       transform: scale(1.18);
       pointer-events: auto;
     }
-
     .bubble:hover {
       box-shadow: 0 0 96px 0 #e7c873aa, 0 0 0 0 #0000;
       transform: scale(1.22);
       opacity: 1;
       filter: none;
     }
-
     .bubble h2 {
       margin: 0;
       position: relative;
@@ -180,7 +171,6 @@
       justify-content: center;
       height: 100%;
     }
-
     .bubble.center {
       transform: scale(1.18);
       opacity: 1;
@@ -226,8 +216,12 @@
       background: #e7c873;
       color: #181818;
     }
-    .arrow.left { left: 0; }
-    .arrow.right { right: 0; }
+    .arrow.left {
+      left: 0;
+    }
+    .arrow.right {
+      right: 0;
+    }
 
     footer {
       text-align: center;
@@ -273,6 +267,7 @@
   </footer>
 
   <script>
+    // Liste des bulles (sections)
     const bubblesData = [
       {
         section: 'tous-les-boss',
@@ -314,6 +309,7 @@
     const carousel = document.getElementById("carousel");
     let scrollIndex = 0;
     const bubbleCount = bubblesData.length;
+    const radius = 420; // rayon du cylindre
     let bubbleDivs = [];
 
     function renderCarousel() {
@@ -335,6 +331,7 @@
 
     function updateCarousel3D() {
       for (let i = 0; i < bubbleCount; i++) {
+        // Calcul de la distance circulaire (carrousel infini)
         let dist = Math.abs(i - scrollIndex);
         if (dist > bubbleCount / 2) dist = bubbleCount - dist;
         bubbleDivs[i].classList.remove('center', 'near', 'far');
@@ -346,18 +343,22 @@
           bubbleDivs[i].classList.add('far');
         }
       }
-
-      const bubbleWidth = bubbleDivs[0].offsetWidth + 32; // 32 = gap
-      const shiftValue = (carousel.parentElement.offsetWidth / 2) - (bubbleWidth / 2);
-      carousel.style.setProperty('--shift', `${-scrollIndex * bubbleWidth + shiftValue}px`);
-      carousel.classList.add('shifted');
-
+      // Centrer la bulle active
+      const bubbleWidth = 220 + 32; // largeur + gap
+      const viewport = document.querySelector('.carousel-viewport');
+      const offset = (scrollIndex * bubbleWidth) - ((viewport.offsetWidth - bubbleWidth) / 2);
+      carousel.style.transform = `translateX(${-offset}px)`;
+      // Changer le fond selon la bulle centrale
       const bgUrl = bubblesData[scrollIndex].bg;
       document.body.style.backgroundImage = `linear-gradient(135deg, #181818cc 0%, #232323cc 100%), url('${bgUrl}')`;
     }
 
     function scrollCarousel(direction) {
       scrollIndex = (scrollIndex + direction + bubbleCount) % bubbleCount;
+      // Réorganise l'ordre d'affichage des bulles dans le DOM pour effet Twitch
+      for (let i = 0; i < bubbleCount; i++) {
+        carousel.appendChild(bubbleDivs[(i + scrollIndex) % bubbleCount]);
+      }
       updateCarousel3D();
     }
 
