@@ -92,7 +92,6 @@
       position: relative;
       height: 400px;
       perspective: none;
-      transition: transform 0.6s cubic-bezier(.77,0,.18,1);
     }
 
     .bubble {
@@ -170,6 +169,27 @@
       align-items: center;
       justify-content: center;
       height: 100%;
+    }
+    .bubble.center {
+      transform: scale(1.18);
+      opacity: 1;
+      filter: none;
+      z-index: 3;
+      box-shadow: 0 0 64px 0 #e7c87377, 0 0 0 0 #0000;
+    }
+    .bubble.near {
+      transform: scale(1.05);
+      opacity: 0.7;
+      filter: grayscale(0.2) brightness(0.8);
+      z-index: 2;
+      box-shadow: 0 0 32px 0 #e7c87333, 0 0 0 0 #0000;
+    }
+    .bubble.far {
+      transform: scale(0.8);
+      opacity: 0.25;
+      filter: grayscale(0.5) blur(1px) brightness(0.5);
+      z-index: 1;
+      box-shadow: none;
     }
 
     .arrow {
@@ -310,21 +330,18 @@
 
     function updateCarousel3D() {
       for (let i = 0; i < bubbleCount; i++) {
-        if (i === scrollIndex) {
-          bubbleDivs[i].classList.add('active');
-          bubbleDivs[i].classList.remove('inactive');
-          bubbleDivs[i].style.opacity = 1;
+        // Calcul de la distance circulaire (carrousel infini)
+        let dist = Math.abs(i - scrollIndex);
+        if (dist > bubbleCount / 2) dist = bubbleCount - dist;
+        bubbleDivs[i].classList.remove('center', 'near', 'far');
+        if (dist === 0) {
+          bubbleDivs[i].classList.add('center');
+        } else if (dist === 1) {
+          bubbleDivs[i].classList.add('near');
         } else {
-          bubbleDivs[i].classList.remove('active');
-          bubbleDivs[i].classList.add('inactive');
-          bubbleDivs[i].style.opacity = 0.3;
+          bubbleDivs[i].classList.add('far');
         }
       }
-      // Centrer la bulle active
-      const bubbleWidth = 220 + 32; // largeur + gap
-      const viewport = document.querySelector('.carousel-viewport');
-      const offset = (scrollIndex * bubbleWidth) - ((viewport.offsetWidth - bubbleWidth) / 2);
-      carousel.style.transform = `translateX(${-offset}px)`;
       // Changer le fond selon la bulle centrale
       const bgUrl = bubblesData[scrollIndex].bg;
       document.body.style.backgroundImage = `linear-gradient(135deg, #181818cc 0%, #232323cc 100%), url('${bgUrl}')`;
