@@ -315,13 +315,26 @@
     function renderCarousel() {
       carousel.innerHTML = '';
       bubbleDivs = [];
-      for (let i = 0; i < bubbleCount; i++) {
-        const b = bubblesData[i];
-        const div = document.createElement('div');
-        div.className = 'bubble';
-        div.style.backgroundImage = `url('${b.bg}')`;
-        div.onclick = () => goTo(b.section);
-        div.innerHTML = `<h2>${b.label}</h2>`;
+      // Afficher 7 bulles : 3 à gauche, 1 centrale, 3 à droite
+      for (let offset = -3; offset <= 3; offset++) {
+        let idx = (scrollIndex + offset + bubbleCount) % bubbleCount;
+        let isPlaceholder = false;
+        // Si on est au tout début ou à la fin, on met des placeholders
+        if (scrollIndex + offset < 0 || scrollIndex + offset >= bubbleCount) {
+          isPlaceholder = true;
+        }
+        let div = document.createElement('div');
+        if (isPlaceholder) {
+          div.className = 'bubble far';
+          div.style.visibility = 'hidden';
+          div.innerHTML = '';
+        } else {
+          const b = bubblesData[idx];
+          div.className = 'bubble';
+          div.style.backgroundImage = `url('${b.bg}')`;
+          div.onclick = () => goTo(b.section);
+          div.innerHTML = `<h2>${b.label}</h2>`;
+        }
         carousel.appendChild(div);
         bubbleDivs.push(div);
       }
@@ -330,24 +343,16 @@
     renderCarousel();
 
     function updateCarousel3D() {
-      for (let i = 0; i < bubbleCount; i++) {
-        // Calcul de la distance circulaire (carrousel infini)
-        let dist = Math.abs(i - scrollIndex);
-        if (dist > bubbleCount / 2) dist = bubbleCount - dist;
+      for (let i = 0; i < bubbleDivs.length; i++) {
         bubbleDivs[i].classList.remove('center', 'near', 'far');
-        if (dist === 0) {
+        if (i === 3) {
           bubbleDivs[i].classList.add('center');
-        } else if (dist === 1) {
+        } else if (i === 2 || i === 4) {
           bubbleDivs[i].classList.add('near');
         } else {
           bubbleDivs[i].classList.add('far');
         }
       }
-      // Centrer la bulle active
-      const bubbleWidth = 220 + 32; // largeur + gap
-      const viewport = document.querySelector('.carousel-viewport');
-      const offset = (scrollIndex * bubbleWidth) - ((viewport.offsetWidth - bubbleWidth) / 2);
-      carousel.style.transform = `translateX(${-offset}px)`;
       // Changer le fond selon la bulle centrale
       const bgUrl = bubblesData[scrollIndex].bg;
       document.body.style.backgroundImage = `linear-gradient(135deg, #181818cc 0%, #232323cc 100%), url('${bgUrl}')`;
@@ -355,11 +360,7 @@
 
     function scrollCarousel(direction) {
       scrollIndex = (scrollIndex + direction + bubbleCount) % bubbleCount;
-      // Réorganise l'ordre d'affichage des bulles dans le DOM pour effet Twitch
-      for (let i = 0; i < bubbleCount; i++) {
-        carousel.appendChild(bubbleDivs[(i + scrollIndex) % bubbleCount]);
-      }
-      updateCarousel3D();
+      renderCarousel();
     }
 
     function goTo(section) {
