@@ -67,10 +67,10 @@
     .carousel-container {
       position: relative;
       width: 100%;
-      overflow: hidden;
-      padding: 50px 0 60px 0;
-      background: linear-gradient(120deg, #232323 60%, #181818 100%);
-      box-shadow: 0 8px 32px 0 #000a;
+      overflow: visible;
+      padding: 0;
+      background: none;
+      box-shadow: none;
     }
 
     .carousel {
@@ -101,8 +101,8 @@
       top: 50%;
       transform-style: preserve-3d;
       transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s, box-shadow 0.3s, background 0.3s;
-      opacity: 0.7;
-      filter: grayscale(0.1) brightness(0.85);
+      opacity: 0.4;
+      filter: grayscale(0.2) brightness(0.7);
       z-index: 1;
       overflow: hidden;
       display: flex;
@@ -119,6 +119,13 @@
       pointer-events: none;
       transition: background 0.3s;
     }
+    .bubble.inactive {
+      transform: scale(0.7) translate(-50%, -50%) !important;
+      opacity: 0.25 !important;
+      filter: grayscale(0.5) blur(1px) brightness(0.5);
+      z-index: 0;
+      pointer-events: none;
+    }
     .bubble.active {
       opacity: 1;
       filter: none;
@@ -127,6 +134,7 @@
       background-size: cover;
       background-position: center;
       transform: scale(1.13) translate(-50%, -50%) !important;
+      pointer-events: auto;
     }
     .bubble:hover {
       box-shadow: 0 0 96px 0 #e7c873aa, 0 0 0 0 #0000;
@@ -298,8 +306,16 @@
         const x = Math.sin(rad) * radius;
         const z = Math.cos(rad) * radius;
         bubbleDivs[i].style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${-z}px)`;
-        bubbleDivs[i].style.opacity = Math.abs(angle) < 90 ? 1 : 0.3;
-        bubbleDivs[i].classList.toggle('active', angle === 0);
+        // Appliquer la classe active à la bulle centrale, inactive aux autres
+        if (angle === 0) {
+          bubbleDivs[i].classList.add('active');
+          bubbleDivs[i].classList.remove('inactive');
+          bubbleDivs[i].style.opacity = 1;
+        } else {
+          bubbleDivs[i].classList.remove('active');
+          bubbleDivs[i].classList.add('inactive');
+          bubbleDivs[i].style.opacity = 0.25;
+        }
       }
       // Changer le fond selon la bulle centrale
       const bgUrl = bubblesData[scrollIndex].bg;
