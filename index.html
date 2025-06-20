@@ -2,60 +2,92 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Blog Elden Ring</title>
+  <title>Blog Elden Ring - Présentation</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #1e1e1e;
-      color: #f1f1f1;
+      background: #121212;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      overflow-x: hidden;
     }
+
     header {
-      background-color: #111;
-      padding: 20px;
       text-align: center;
+      padding: 30px;
+      background: #1a1a1a;
       border-bottom: 2px solid gold;
     }
+
     header h1 {
       margin: 0;
       color: gold;
+      font-size: 2.5em;
     }
-    nav {
-      text-align: center;
-      margin-top: 10px;
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 40px 0;
     }
-    nav input {
-      padding: 8px;
-      border-radius: 4px;
-      border: none;
-      width: 60%;
-      max-width: 400px;
+
+    .carousel {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease-in-out;
     }
-    main {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-    .post {
+
+    .bubble {
+      min-width: 300px;
+      height: 300px;
       background-color: #2c2c2c;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-left: 5px solid gold;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .post:hover {
-      transform: scale(1.01);
-    }
-    .post h2 {
-      color: #ffd700;
-      margin-top: 0;
-    }
-    footer {
-      background-color: #111;
+      border: 3px solid gold;
+      border-radius: 50%;
       text-align: center;
-      padding: 15px;
+      padding: 30px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .bubble:hover {
+      transform: scale(1.05);
+      background-color: #3a3a3a;
+    }
+
+    .bubble h2 {
+      margin-top: 40px;
+      font-size: 1.3em;
+      color: #ffd700;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3em;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: gold;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .arrow.left {
+      left: 10px;
+    }
+
+    .arrow.right {
+      right: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #1a1a1a;
       border-top: 2px solid gold;
       color: #aaa;
     }
@@ -64,46 +96,48 @@
 <body>
 
   <header>
-    <h1>Blog Elden Ring</h1>
-    <nav>
-      <input type="text" id="search" placeholder="Rechercher un article...">
-    </nav>
+    <h1>Exploration de l'univers Elden Ring</h1>
   </header>
 
-  <main id="posts">
-    <div class="post">
-      <h2>Qu'est-ce qu'Elden Ring ?</h2>
-      <p><strong>Elden Ring</strong> est un jeu vidéo d'action-RPG développé par FromSoftware, en collaboration avec George R. R. Martin. Sorti en 2022, il propose un monde ouvert sombre, mystérieux et extrêmement riche.</p>
+  <div class="carousel-container">
+    <button class="arrow left" onclick="scrollCarousel(-1)">&#10094;</button>
+    <div class="carousel" id="carousel">
+      <div class="bubble" onclick="goTo('intro')">
+        <h2>Qu'est-ce qu'Elden Ring ?</h2>
+      </div>
+      <div class="bubble" onclick="goTo('gameplay')">
+        <h2>Gameplay et Difficulté</h2>
+      </div>
+      <div class="bubble" onclick="goTo('world')">
+        <h2>Les Terres Intermédiaires</h2>
+      </div>
+      <div class="bubble" onclick="goTo('culte')">
+        <h2>Pourquoi ce jeu est culte ?</h2>
+      </div>
     </div>
-    <div class="post">
-      <h2>Gameplay et Difficulté</h2>
-      <p>Comme les précédents jeux de FromSoftware, Elden Ring est reconnu pour sa difficulté exigeante, ses combats de boss intenses et son exploration libre. Les joueurs peuvent personnaliser leur personnage et découvrir le monde à leur rythme.</p>
-    </div>
-    <div class="post">
-      <h2>Les Terres Intermédiaires</h2>
-      <p>Le monde d’Elden Ring, appelé les Terres Intermédiaires, est vaste et regorge de secrets, de donjons, de boss cachés et de lieux majestueux. Chaque zone a son ambiance propre et une direction artistique soignée.</p>
-    </div>
-    <div class="post">
-      <h2>Pourquoi ce jeu est-il culte ?</h2>
-      <p>Entre sa liberté de gameplay, sa direction artistique, sa bande-son et son univers narratif mystérieux, Elden Ring a marqué l'histoire du jeu vidéo. Il a remporté de nombreux prix, dont le Game of the Year 2022.</p>
-    </div>
-  </main>
+    <button class="arrow right" onclick="scrollCarousel(1)">&#10095;</button>
+  </div>
 
   <footer>
-    Projet Terminale BAC | Blog sur Elden Ring © 2025
+    Projet Terminale - Blog Elden Ring © 2025
   </footer>
 
   <script>
-    const searchInput = document.getElementById('search');
-    const posts = document.querySelectorAll('.post');
+    const carousel = document.getElementById("carousel");
+    let scrollIndex = 0;
 
-    searchInput.addEventListener('input', () => {
-      const value = searchInput.value.toLowerCase();
-      posts.forEach(post => {
-        const content = post.innerText.toLowerCase();
-        post.style.display = content.includes(value) ? 'block' : 'none';
-      });
-    });
+    function scrollCarousel(direction) {
+      const bubbleWidth = 330; // taille d'une bulle + gap
+      scrollIndex += direction;
+      scrollIndex = Math.max(0, Math.min(scrollIndex, carousel.children.length - 1));
+      carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
+    }
+
+    function goTo(section) {
+      alert("Redirection vers : " + section); 
+      // Remplace cette ligne par une vraie redirection si tu veux
+      // location.href = section + ".html";
+    }
   </script>
 </body>
 </html>
