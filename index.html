@@ -256,14 +256,16 @@
       pointer-events: none;
     }
     .hero-bg-youtube iframe {
-      width: 100vw;
-      height: 100vh;
-      min-width: 100%;
-      min-height: 100%;
+      width: 120vw;
+      height: 120vh;
+      min-width: 100vw;
+      min-height: 100vh;
       position: absolute;
-      top: 0; left: 0;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(1.1);
       object-fit: cover;
       pointer-events: none;
+      background: #000;
     }
     .hero-overlay {
       position: absolute;
@@ -348,7 +350,7 @@
   <section id="hero">
     <div class="hero-bg-youtube">
       <iframe
-        src="https://www.youtube.com/embed/fXGULB8PdO4?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=fXGULB8PdO4&modestbranding=1"
+        src="https://www.youtube.com/embed/fXGULB8PdO4?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=fXGULB8PdO4&modestbranding=1&start=5"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen
