@@ -79,9 +79,8 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      height: 340px;
-      perspective: 1200px;
-      /* pas de transition ici, gérée sur les bulles */
+      height: 400px;
+      perspective: none;
     }
 
     .bubble {
@@ -99,7 +98,7 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      transform-style: preserve-3d;
+      transform-style: flat;
       transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s, box-shadow 0.3s, background 0.3s;
       opacity: 0.4;
       filter: grayscale(0.2) brightness(0.7);
@@ -298,16 +297,16 @@
 
     function updateCarousel3D() {
       for (let i = 0; i < bubbleCount; i++) {
-        // Calculer l'angle relatif à la bulle centrale
-        let angle = ((i - scrollIndex + bubbleCount) % bubbleCount) * (360 / bubbleCount);
-        if (angle > 180) angle -= 360; // pour tourner dans le bon sens
-        // Positionner chaque bulle sur le cylindre
-        const rad = angle * Math.PI / 180;
-        const x = Math.sin(rad) * radius;
-        const z = Math.cos(rad) * radius;
-        bubbleDivs[i].style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${-z}px)`;
-        // Appliquer la classe active à la bulle centrale, inactive aux autres
-        if (angle === 0) {
+        // Calculer la position horizontale relative à la bulle centrale
+        let pos = i - scrollIndex;
+        // Pour effet de continuité (carrousel infini)
+        if (pos < -Math.floor(bubbleCount/2)) pos += bubbleCount;
+        if (pos > Math.floor(bubbleCount/2)) pos -= bubbleCount;
+        const spacing = 380; // espace horizontal entre bulles
+        const x = pos * spacing;
+        bubbleDivs[i].style.transform = `translate(-50%, -50%) translateX(${x}px)`;
+        // Focus central
+        if (pos === 0) {
           bubbleDivs[i].classList.add('active');
           bubbleDivs[i].classList.remove('inactive');
           bubbleDivs[i].style.opacity = 1;
