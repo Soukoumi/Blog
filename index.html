@@ -157,27 +157,7 @@
   <div class="carousel-container">
     <button class="arrow left" onclick="scrollCarousel(-1)">&#10094;</button>
     <div class="carousel" id="carousel">
-      <div class="bubble" onclick="goTo('tous-les-boss')">
-        <h2>Tous les Boss</h2>
-      </div>
-      <div class="bubble" onclick="goTo('toutes-les-zones')">
-        <h2>Toutes les Zones</h2>
-      </div>
-      <div class="bubble" onclick="goTo('histoire')">
-        <h2>L'Histoire du Jeu</h2>
-      </div>
-      <div class="bubble" onclick="goTo('but')">
-        <h2>Le But du Jeu</h2>
-      </div>
-      <div class="bubble" onclick="goTo('ventes-avis')">
-        <h2>Ventes, Joueurs & Avis</h2>
-      </div>
-      <div class="bubble" onclick="goTo('speedrun')">
-        <h2>Catégories de Speedrun</h2>
-      </div>
-      <div class="bubble" onclick="goTo('createurs')">
-        <h2>Créateurs du Jeu</h2>
-      </div>
+      <!-- Les bulles seront générées dynamiquement par JS -->
     </div>
     <button class="arrow right" onclick="scrollCarousel(1)">&#10095;</button>
   </div>
@@ -187,14 +167,65 @@
   </footer>
 
   <script>
+    // Liste des bulles (sections)
+    const bubblesData = [
+      { section: 'tous-les-boss', label: 'Tous les Boss' },
+      { section: 'toutes-les-zones', label: 'Toutes les Zones' },
+      { section: 'histoire', label: "L'Histoire du Jeu" },
+      { section: 'but', label: 'Le But du Jeu' },
+      { section: 'ventes-avis', label: 'Ventes, Joueurs & Avis' },
+      { section: 'speedrun', label: 'Catégories de Speedrun' },
+      { section: 'createurs', label: 'Créateurs du Jeu' }
+    ];
+
     const carousel = document.getElementById("carousel");
     let scrollIndex = 0;
-    const bubbleCount = carousel.children.length;
+    const bubbleWidth = 360; // taille d'une bulle + gap
+
+    // Générer les bulles avec duplicata pour effet infini
+    function renderCarousel() {
+      // On duplique la dernière bulle au début et la première à la fin
+      const bubbles = [];
+      // Dupliqué fin -> début
+      bubbles.push(bubblesData[bubblesData.length - 1]);
+      // Les vraies bulles
+      bubbles.push(...bubblesData);
+      // Dupliqué début -> fin
+      bubbles.push(bubblesData[0]);
+      // Générer le HTML
+      carousel.innerHTML = '';
+      bubbles.forEach((b, i) => {
+        const div = document.createElement('div');
+        div.className = 'bubble';
+        div.onclick = () => goTo(b.section);
+        div.innerHTML = `<h2>${b.label}</h2>`;
+        carousel.appendChild(div);
+      });
+    }
+    renderCarousel();
+
+    // Positionner sur la première vraie bulle
+    scrollIndex = 1;
+    carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
 
     function scrollCarousel(direction) {
-      scrollIndex = (scrollIndex + direction + bubbleCount) % bubbleCount;
-      const bubbleWidth = 360; // taille d'une bulle + gap
+      scrollIndex += direction;
+      carousel.style.transition = 'transform 0.5s cubic-bezier(.77,0,.18,1)';
       carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
+      // Après la transition, si on est sur un duplicata, on saute sans animation
+      setTimeout(() => {
+        if (scrollIndex === 0) {
+          // On était sur le duplicata de fin, on saute à la vraie dernière
+          carousel.style.transition = 'none';
+          scrollIndex = bubblesData.length;
+          carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
+        } else if (scrollIndex === bubblesData.length + 1) {
+          // On était sur le duplicata de début, on saute à la vraie première
+          carousel.style.transition = 'none';
+          scrollIndex = 1;
+          carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
+        }
+      }, 510); // attendre la fin de la transition
     }
 
     function goTo(section) {
