@@ -233,40 +233,112 @@
       letter-spacing: 1px;
       box-shadow: 0 -4px 24px 0 #000a;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+    #hero {
+      min-height: 100vh;
+      width: 100vw;
+      background: linear-gradient(135deg, #181818 0%, #232323 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+    }
+    .hero-content {
+      text-align: center;
+      width: 100%;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: 5em;
+      color: #e7c873;
+      text-shadow: 0 4px 32px #000, 0 0 24px #e7c87344;
+      margin-bottom: 40px;
+      letter-spacing: 4px;
+      font-weight: bold;
+    }
+    .scroll-down {
+      background: none;
+      border: 2px solid #e7c873;
+      color: #e7c873;
+      font-size: 2.5em;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      box-shadow: 0 2px 12px #000a;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      margin-top: 20px;
+      animation: bounce 1.5s infinite;
+    }
+    .scroll-down:hover {
+      background: #e7c873;
+      color: #181818;
+      transform: scale(1.1);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(18px); }
+    }
+    #main-content {
+      margin-top: 0;
+    }
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2.2em; }
+      .scroll-down { font-size: 1.5em; width: 48px; height: 48px; }
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <header>
-    <h1>Exploration de l'univers Elden Ring</h1>
-  </header>
-
-  <nav>
-    <a href="tous-les-boss.html">Tous les Boss</a>
-    <a href="toutes-les-zones.html">Toutes les Zones</a>
-    <a href="histoire.html">L'Histoire</a>
-    <a href="but.html">But du Jeu</a>
-    <a href="ventes-avis.html">Ventes & Avis</a>
-    <a href="speedrun.html">Speedrun</a>
-    <a href="createurs.html">Créateurs</a>
-  </nav>
-
-  <div class="carousel-container">
-    <button class="arrow left" onclick="scrollCarousel(-1)">&#10094;</button>
-    <div class="carousel-viewport">
-      <div class="carousel" id="carousel">
-        <!-- Les bulles seront générées dynamiquement par JS -->
-      </div>
+  <!-- Section d'accueil fullscreen -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Elden Ring</h1>
+      <button class="scroll-down" onclick="scrollToMain()" aria-label="Descendre">
+        &#8595;
+      </button>
     </div>
-    <button class="arrow right" onclick="scrollCarousel(1)">&#10095;</button>
-  </div>
+  </section>
 
-  <footer>
-    Projet Terminale - Blog Elden Ring © 2025
-  </footer>
+  <main id="main-content">
+    <header>
+      <h1>Exploration de l'univers Elden Ring</h1>
+    </header>
+
+    <nav>
+      <a href="tous-les-boss.html">Tous les Boss</a>
+      <a href="toutes-les-zones.html">Toutes les Zones</a>
+      <a href="histoire.html">L'Histoire</a>
+      <a href="but.html">But du Jeu</a>
+      <a href="ventes-avis.html">Ventes & Avis</a>
+      <a href="speedrun.html">Speedrun</a>
+      <a href="createurs.html">Créateurs</a>
+    </nav>
+
+    <div class="carousel-container">
+      <button class="arrow left" onclick="scrollCarousel(-1)">&#10094;</button>
+      <div class="carousel-viewport">
+        <div class="carousel" id="carousel">
+          <!-- Les bulles seront générées dynamiquement par JS -->
+        </div>
+      </div>
+      <button class="arrow right" onclick="scrollCarousel(1)">&#10095;</button>
+    </div>
+
+    <footer>
+      Projet Terminale - Blog Elden Ring © 2025
+    </footer>
+  </main>
 
   <script>
+    function scrollToMain() {
+      document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+    }
     // Liste des bulles (sections)
     const bubblesData = [
       {
