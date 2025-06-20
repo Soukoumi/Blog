@@ -71,20 +71,32 @@
     }
 
     .bubble {
+      min-width: 320px;
+      height: 320px;
+      background: radial-gradient(circle at 60% 40%, #232323 60%, #181818 100%);
+      border: 4px solid #e7c873;
+      box-shadow: 0 0 32px 0 #e7c87322, 0 0 0 8px #000a;
+      border-radius: 50%;
+      text-align: center;
+      padding: 36px 20px 0 20px;
+      box-sizing: border-box;
+      cursor: pointer;
       position: absolute;
       left: 50%;
       top: 50%;
       transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s;
+      transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s, box-shadow 0.3s, background 0.3s;
       opacity: 0.5;
       filter: blur(1px) grayscale(0.3);
       z-index: 1;
+      overflow: hidden;
     }
     .bubble.active {
       opacity: 1;
       filter: none;
       z-index: 2;
       box-shadow: 0 0 48px 0 #e7c87355, 0 0 0 12px #000a;
+      background: radial-gradient(circle at 60% 40%, #2d2d2d 70%, #232323 100%);
       transform: scale(1.1) translate(-50%, -50%) !important;
     }
     .bubble h2 {
