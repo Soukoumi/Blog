@@ -61,31 +61,31 @@
 
     .carousel {
       display: flex;
-      gap: 40px;
+      gap: 0;
       justify-content: center;
       align-items: center;
-      transition: transform 0.5s cubic-bezier(.77,0,.18,1);
+      position: relative;
+      height: 340px;
+      perspective: 1200px;
+      /* pas de transition ici, gérée sur les bulles */
     }
 
     .bubble {
-      min-width: 320px;
-      height: 320px;
-      background: radial-gradient(circle at 60% 40%, #232323 60%, #181818 100%);
-      border: 4px solid #e7c873;
-      box-shadow: 0 0 32px 0 #e7c87322, 0 0 0 8px #000a;
-      border-radius: 50%;
-      text-align: center;
-      padding: 36px 20px 0 20px;
-      box-sizing: border-box;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-      position: relative;
-      overflow: hidden;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s;
+      opacity: 0.5;
+      filter: blur(1px) grayscale(0.3);
+      z-index: 1;
     }
-    .bubble:hover {
-      transform: scale(1.07) rotate(-2deg);
-      background: radial-gradient(circle at 60% 40%, #2d2d2d 70%, #232323 100%);
+    .bubble.active {
+      opacity: 1;
+      filter: none;
+      z-index: 2;
       box-shadow: 0 0 48px 0 #e7c87355, 0 0 0 12px #000a;
+      transform: scale(1.1) translate(-50%, -50%) !important;
     }
     .bubble h2 {
       margin-top: 60px;
@@ -180,52 +180,44 @@
 
     const carousel = document.getElementById("carousel");
     let scrollIndex = 0;
-    const bubbleWidth = 360; // taille d'une bulle + gap
+    const bubbleCount = bubblesData.length;
+    const radius = 420; // rayon du cylindre
+    let bubbleDivs = [];
 
-    // Générer les bulles avec duplicata pour effet infini
     function renderCarousel() {
-      // On duplique la dernière bulle au début et la première à la fin
-      const bubbles = [];
-      // Dupliqué fin -> début
-      bubbles.push(bubblesData[bubblesData.length - 1]);
-      // Les vraies bulles
-      bubbles.push(...bubblesData);
-      // Dupliqué début -> fin
-      bubbles.push(bubblesData[0]);
-      // Générer le HTML
       carousel.innerHTML = '';
-      bubbles.forEach((b, i) => {
+      bubbleDivs = [];
+      for (let i = 0; i < bubbleCount; i++) {
+        const b = bubblesData[i];
         const div = document.createElement('div');
         div.className = 'bubble';
         div.onclick = () => goTo(b.section);
         div.innerHTML = `<h2>${b.label}</h2>`;
         carousel.appendChild(div);
-      });
+        bubbleDivs.push(div);
+      }
+      updateCarousel3D();
     }
     renderCarousel();
 
-    // Positionner sur la première vraie bulle
-    scrollIndex = 1;
-    carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
+    function updateCarousel3D() {
+      for (let i = 0; i < bubbleCount; i++) {
+        // Calculer l'angle relatif à la bulle centrale
+        let angle = ((i - scrollIndex + bubbleCount) % bubbleCount) * (360 / bubbleCount);
+        if (angle > 180) angle -= 360; // pour tourner dans le bon sens
+        // Positionner chaque bulle sur le cylindre
+        const rad = angle * Math.PI / 180;
+        const x = Math.sin(rad) * radius;
+        const z = Math.cos(rad) * radius;
+        bubbleDivs[i].style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${-z}px)`;
+        bubbleDivs[i].style.opacity = Math.abs(angle) < 90 ? 1 : 0.3;
+        bubbleDivs[i].classList.toggle('active', angle === 0);
+      }
+    }
 
     function scrollCarousel(direction) {
-      scrollIndex += direction;
-      carousel.style.transition = 'transform 0.5s cubic-bezier(.77,0,.18,1)';
-      carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
-      // Après la transition, si on est sur un duplicata, on saute sans animation
-      setTimeout(() => {
-        if (scrollIndex === 0) {
-          // On était sur le duplicata de fin, on saute à la vraie dernière
-          carousel.style.transition = 'none';
-          scrollIndex = bubblesData.length;
-          carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
-        } else if (scrollIndex === bubblesData.length + 1) {
-          // On était sur le duplicata de début, on saute à la vraie première
-          carousel.style.transition = 'none';
-          scrollIndex = 1;
-          carousel.style.transform = `translateX(${-scrollIndex * bubbleWidth}px)`;
-        }
-      }, 510); // attendre la fin de la transition
+      scrollIndex = (scrollIndex + direction + bubbleCount) % bubbleCount;
+      updateCarousel3D();
     }
 
     function goTo(section) {
