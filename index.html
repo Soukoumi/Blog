@@ -315,26 +315,15 @@
     function renderCarousel() {
       carousel.innerHTML = '';
       bubbleDivs = [];
-      // Afficher 7 bulles : 3 à gauche, 1 centrale, 3 à droite
+      // Carrousel infini : toujours 7 vraies bulles, on boucle avec modulo
       for (let offset = -3; offset <= 3; offset++) {
         let idx = (scrollIndex + offset + bubbleCount) % bubbleCount;
-        let isPlaceholder = false;
-        // Si on est au tout début ou à la fin, on met des placeholders
-        if (scrollIndex + offset < 0 || scrollIndex + offset >= bubbleCount) {
-          isPlaceholder = true;
-        }
+        const b = bubblesData[idx];
         let div = document.createElement('div');
-        if (isPlaceholder) {
-          div.className = 'bubble far';
-          div.style.visibility = 'hidden';
-          div.innerHTML = '';
-        } else {
-          const b = bubblesData[idx];
-          div.className = 'bubble';
-          div.style.backgroundImage = `url('${b.bg}')`;
-          div.onclick = () => goTo(b.section);
-          div.innerHTML = `<h2>${b.label}</h2>`;
-        }
+        div.className = 'bubble';
+        div.style.backgroundImage = `url('${b.bg}')`;
+        div.onclick = () => goTo(b.section);
+        div.innerHTML = `<h2>${b.label}</h2>`;
         carousel.appendChild(div);
         bubbleDivs.push(div);
       }
