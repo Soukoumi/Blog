@@ -85,14 +85,15 @@
     }
 
     .bubble {
-      min-width: 320px;
-      height: 320px;
-      background: radial-gradient(circle at 60% 40%, #232323 60%, #181818 100%);
-      border: 4px solid #e7c873;
-      box-shadow: 0 0 32px 0 #e7c87322, 0 0 0 8px #000a;
+      min-width: 360px;
+      height: 360px;
+      background-size: cover;
+      background-position: center;
+      border: none;
+      box-shadow: 0 0 48px 0 #e7c87333, 0 0 0 0 #0000;
       border-radius: 50%;
       text-align: center;
-      padding: 36px 20px 0 20px;
+      padding: 0;
       box-sizing: border-box;
       cursor: pointer;
       position: absolute;
@@ -100,25 +101,57 @@
       top: 50%;
       transform-style: preserve-3d;
       transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s, filter 0.4s, box-shadow 0.3s, background 0.3s;
-      opacity: 0.5;
-      filter: blur(1px) grayscale(0.3);
+      opacity: 0.7;
+      filter: grayscale(0.1) brightness(0.85);
       z-index: 1;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bubble::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(24,24,24,0.55) 40%, rgba(35,35,35,0.35) 100%);
+      z-index: 1;
+      border-radius: 50%;
+      pointer-events: none;
+      transition: background 0.3s;
     }
     .bubble.active {
       opacity: 1;
       filter: none;
       z-index: 2;
-      box-shadow: 0 0 48px 0 #e7c87355, 0 0 0 12px #000a;
-      background: radial-gradient(circle at 60% 40%, #2d2d2d 70%, #232323 100%);
-      transform: scale(1.1) translate(-50%, -50%) !important;
+      box-shadow: 0 0 64px 0 #e7c87377, 0 0 0 0 #0000;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.13) translate(-50%, -50%) !important;
+    }
+    .bubble:hover {
+      box-shadow: 0 0 96px 0 #e7c873aa, 0 0 0 0 #0000;
+      transform: scale(1.18) translate(-50%, -50%) !important;
+      opacity: 1;
+      filter: none;
     }
     .bubble h2 {
-      margin-top: 60px;
-      font-size: 1.25em;
-      color: #e7c873;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+      font-size: 1.35em;
+      color: #fff;
       font-family: 'Cinzel', serif;
-      text-shadow: 0 2px 8px #000, 0 0 8px #e7c87344;
+      text-shadow: 0 2px 12px #000, 0 0 8px #e7c87399;
+      font-weight: bold;
+      padding: 0 18px;
+      letter-spacing: 1px;
+      line-height: 1.3;
+      text-align: center;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
     }
 
     .arrow {
@@ -245,6 +278,7 @@
         const b = bubblesData[i];
         const div = document.createElement('div');
         div.className = 'bubble';
+        div.style.backgroundImage = `url('${b.bg}')`;
         div.onclick = () => goTo(b.section);
         div.innerHTML = `<h2>${b.label}</h2>`;
         carousel.appendChild(div);
