@@ -71,8 +71,19 @@
       padding: 0;
       background: none;
       box-shadow: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-
+    .carousel-viewport {
+      width: 800px;
+      max-width: 95vw;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .carousel {
       display: flex;
       gap: 32px;
@@ -81,6 +92,7 @@
       position: relative;
       height: 400px;
       perspective: none;
+      transition: transform 0.6s cubic-bezier(.77,0,.18,1);
     }
 
     .bubble {
@@ -184,10 +196,10 @@
       color: #181818;
     }
     .arrow.left {
-      left: 10px;
+      left: 0;
     }
     .arrow.right {
-      right: 10px;
+      right: 0;
     }
 
     footer {
@@ -221,8 +233,10 @@
 
   <div class="carousel-container">
     <button class="arrow left" onclick="scrollCarousel(-1)">&#10094;</button>
-    <div class="carousel" id="carousel">
-      <!-- Les bulles seront générées dynamiquement par JS -->
+    <div class="carousel-viewport">
+      <div class="carousel" id="carousel">
+        <!-- Les bulles seront générées dynamiquement par JS -->
+      </div>
     </div>
     <button class="arrow right" onclick="scrollCarousel(1)">&#10095;</button>
   </div>
@@ -306,6 +320,11 @@
           bubbleDivs[i].style.opacity = 0.3;
         }
       }
+      // Centrer la bulle active
+      const bubbleWidth = 220 + 32; // largeur + gap
+      const viewport = document.querySelector('.carousel-viewport');
+      const offset = (scrollIndex * bubbleWidth) - ((viewport.offsetWidth - bubbleWidth) / 2);
+      carousel.style.transform = `translateX(${-offset}px)`;
       // Changer le fond selon la bulle centrale
       const bgUrl = bubblesData[scrollIndex].bg;
       document.body.style.backgroundImage = `linear-gradient(135deg, #181818cc 0%, #232323cc 100%), url('${bgUrl}')`;
