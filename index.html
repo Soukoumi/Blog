@@ -240,25 +240,57 @@
     #hero {
       min-height: 100vh;
       width: 100vw;
-      background: linear-gradient(135deg, #181818 0%, #232323 100%);
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       z-index: 10;
+      background: #181818;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      pointer-events: none;
+      filter: brightness(0.55) blur(1px);
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #181818cc 0%, #232323cc 100%);
+      z-index: 2;
+      pointer-events: none;
     }
     .hero-content {
+      position: relative;
+      z-index: 3;
       text-align: center;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .hero-title {
       font-family: 'Cinzel', serif;
-      font-size: 5em;
+      font-size: 6em;
       color: #e7c873;
       text-shadow: 0 4px 32px #000, 0 0 24px #e7c87344;
-      margin-bottom: 40px;
+      margin-bottom: 18px;
       letter-spacing: 4px;
       font-weight: bold;
+    }
+    .hero-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 2em;
+      color: #fffbe7;
+      text-shadow: 0 2px 12px #000, 0 0 8px #e7c87344;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+      font-weight: 400;
+      opacity: 0.92;
     }
     .scroll-down {
       background: none;
@@ -273,6 +305,7 @@
       transition: background 0.2s, color 0.2s, transform 0.2s;
       margin-top: 20px;
       animation: bounce 1.5s infinite;
+      z-index: 4;
     }
     .scroll-down:hover {
       background: #e7c873;
@@ -288,6 +321,7 @@
     }
     @media (max-width: 600px) {
       .hero-title { font-size: 2.2em; }
+      .hero-subtitle { font-size: 1em; }
       .scroll-down { font-size: 1.5em; width: 48px; height: 48px; }
     }
   </style>
@@ -297,8 +331,15 @@
 
   <!-- Section d'accueil fullscreen -->
   <section id="hero">
+    <video class="hero-bg" autoplay loop muted playsinline>
+      <source src="https://cdn.cloudflare.steamstatic.com/steam/apps/256859760/movie480_vp9.webm" type="video/webm">
+      <source src="https://cdn.cloudflare.steamstatic.com/steam/apps/256859760/movie480.mp4" type="video/mp4">
+      <!-- Remplace ces liens par ta propre vidéo si besoin -->
+    </video>
+    <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-title">Elden Ring</h1>
+      <div class="hero-subtitle">GOTY 2022</div>
       <button class="scroll-down" onclick="scrollToMain()" aria-label="Descendre">
         &#8595;
       </button>
