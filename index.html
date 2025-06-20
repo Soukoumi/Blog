@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Elden Ring</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+    }
+    header {
+      background-color: #111;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid gold;
+    }
+    header h1 {
+      margin: 0;
+      color: gold;
+    }
+    nav {
+      text-align: center;
+      margin-top: 10px;
+    }
+    nav input {
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      width: 60%;
+      max-width: 400px;
+    }
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .post {
+      background-color: #2c2c2c;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 5px solid gold;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .post:hover {
+      transform: scale(1.01);
+    }
+    .post h2 {
+      color: #ffd700;
+      margin-top: 0;
+    }
+    footer {
+      background-color: #111;
+      text-align: center;
+      padding: 15px;
+      border-top: 2px solid gold;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Blog Elden Ring</h1>
+    <nav>
+      <input type="text" id="search" placeholder="Rechercher un article...">
+    </nav>
+  </header>
+
+  <main id="posts">
+    <div class="post">
+      <h2>Qu'est-ce qu'Elden Ring ?</h2>
+      <p><strong>Elden Ring</strong> est un jeu vidéo d'action-RPG développé par FromSoftware, en collaboration avec George R. R. Martin. Sorti en 2022, il propose un monde ouvert sombre, mystérieux et extrêmement riche.</p>
+    </div>
+    <div class="post">
+      <h2>Gameplay et Difficulté</h2>
+      <p>Comme les précédents jeux de FromSoftware, Elden Ring est reconnu pour sa difficulté exigeante, ses combats de boss intenses et son exploration libre. Les joueurs peuvent personnaliser leur personnage et découvrir le monde à leur rythme.</p>
+    </div>
+    <div class="post">
+      <h2>Les Terres Intermédiaires</h2>
+      <p>Le monde d’Elden Ring, appelé les Terres Intermédiaires, est vaste et regorge de secrets, de donjons, de boss cachés et de lieux majestueux. Chaque zone a son ambiance propre et une direction artistique soignée.</p>
+    </div>
+    <div class="post">
+      <h2>Pourquoi ce jeu est-il culte ?</h2>
+      <p>Entre sa liberté de gameplay, sa direction artistique, sa bande-son et son univers narratif mystérieux, Elden Ring a marqué l'histoire du jeu vidéo. Il a remporté de nombreux prix, dont le Game of the Year 2022.</p>
+    </div>
+  </main>
+
+  <footer>
+    Projet Terminale BAC | Blog sur Elden Ring © 2025
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('search');
+    const posts = document.querySelectorAll('.post');
+
+    searchInput.addEventListener('input', () => {
+      const value = searchInput.value.toLowerCase();
+      posts.forEach(post => {
+        const content = post.innerText.toLowerCase();
+        post.style.display = content.includes(value) ? 'block' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
