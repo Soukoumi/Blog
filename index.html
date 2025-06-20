@@ -11,6 +11,20 @@
       color: #e7c873;
       overflow-x: hidden;
       min-height: 100vh;
+      transition: background-image 0.7s cubic-bezier(.77,0,.18,1);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      background: inherit;
+      opacity: 0.55;
+      pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(.77,0,.18,1);
     }
 
     header {
@@ -181,13 +195,41 @@
   <script>
     // Liste des bulles (sections)
     const bubblesData = [
-      { section: 'tous-les-boss', label: 'Tous les Boss' },
-      { section: 'toutes-les-zones', label: 'Toutes les Zones' },
-      { section: 'histoire', label: "L'Histoire du Jeu" },
-      { section: 'but', label: 'Le But du Jeu' },
-      { section: 'ventes-avis', label: 'Ventes, Joueurs & Avis' },
-      { section: 'speedrun', label: 'Catégories de Speedrun' },
-      { section: 'createurs', label: 'Créateurs du Jeu' }
+      {
+        section: 'tous-les-boss',
+        label: 'Tous les Boss',
+        bg: 'https://pic.clubic.com/v1/images/1865102/raw?fit=smartCrop&width=1200&height=675&hash=8b67f1d4762c114bd9189b6f17f9d6dbe6797198'
+      },
+      {
+        section: 'toutes-les-zones',
+        label: 'Toutes les Zones',
+        bg: 'https://images.immediate.co.uk/production/volatile/sites/3/2022/03/elden-ring-8ea8a45.png'
+      },
+      {
+        section: 'histoire',
+        label: "L'Histoire du Jeu",
+        bg: 'https://cdn11.bigcommerce.com/s-k0hjo2yyrq/images/stencil/1280x1280/products/1729/1166/Elden_Ring_Books_of_Knowledge_Volume_II_Product_Banner__79608.1724420368.jpg?c=1'
+      },
+      {
+        section: 'but',
+        label: 'Le But du Jeu',
+        bg: 'https://store-images.s-microsoft.com/image/apps.30323.14537704372270848.6ecb6038-5426-409a-8660-158d1eb64fb0.08703491-f5dc-4b00-bca6-486b7b293c17?q=90&w=480&h=270'
+      },
+      {
+        section: 'ventes-avis',
+        label: 'Ventes, Joueurs & Avis',
+        bg: 'https://external-preview.redd.it/elden-ring-has-sold-25-million-units-v0-IfbuZ6bq1oDuPTrlyIvNvPmpNLPpzS1Y5jf__NNOLF8.jpg?width=1080&crop=smart&auto=webp&s=4c62f7f3df871d30df85844241c0e85fd2553c82'
+      },
+      {
+        section: 'speedrun',
+        label: 'Catégories de Speedrun',
+        bg: 'https://img.lemde.fr/2022/02/24/0/1159/2772/1848/1440/960/60/0/e264e26_602258701-capture-d-e-cran-2022-02-24-a-17-06-12.png'
+      },
+      {
+        section: 'createurs',
+        label: 'Créateurs du Jeu',
+        bg: 'https://image.jeuxvideo.com/medias-md/173143/1731429381-5725-card.jpg'
+      }
     ];
 
     const carousel = document.getElementById("carousel");
@@ -225,6 +267,9 @@
         bubbleDivs[i].style.opacity = Math.abs(angle) < 90 ? 1 : 0.3;
         bubbleDivs[i].classList.toggle('active', angle === 0);
       }
+      // Changer le fond selon la bulle centrale
+      const bgUrl = bubblesData[scrollIndex].bg;
+      document.body.style.backgroundImage = `linear-gradient(135deg, #181818cc 0%, #232323cc 100%), url('${bgUrl}')`;
     }
 
     function scrollCarousel(direction) {
